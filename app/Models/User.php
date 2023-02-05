@@ -5,13 +5,20 @@ namespace App\Models;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Notifications\Notifiable;
 use App\Traits\BasemodelTrait;
-use Laravel\Sanctum\HasApiTokens;
+use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Support\Str;
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
-    use HasApiTokens, HasFactory, Notifiable, BasemodelTrait;
+    use HasFactory, Notifiable, BasemodelTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -54,5 +61,23 @@ class User extends Authenticatable
         static::creating(function ($data){
             $data->attributes['remember_token'] = Str::random(10);
         });
+    }
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+
+    public function category(){
+        return $this->hasMany(Category::class);
+    }
+
+    public function posts(){
+        return $this->hasMany(Post::class);
     }
 }
