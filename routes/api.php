@@ -37,18 +37,20 @@ Route::group(['prefix' => 'v1'], function () {
         // Category
         Route::group(['prefix' => 'categories'], function () {
             Route::controller(CategoryController::class)->group(function (){
-                Route::get('', 'index')->name('index');
-                Route::get('profile', 'profile')->name('profile');
-                Route::get('logout', 'logout')->name('logout');
+                Route::get('', 'index')->name('category.index');
+                Route::get('{uuid}/show', 'show')->name('category.show');
+                Route::patch('{uuid}/update', 'update')->name('category.update');
+                Route::delete('{uuid}/delete', 'destroy')->name('category.destroy');
             });
         });
 
         // Post
         Route::group(['prefix' => 'posts'], function () {
             Route::controller(PostController::class)->group(function (){
-                Route::get('', 'index')->name('index');
-                Route::get('profile', 'profile')->name('profile');
-                Route::get('logout', 'logout')->name('logout');
+                Route::get('', 'index')->name('post.index');
+                Route::get('{uuid}/show', 'show')->name('post.show');
+                Route::patch('{uuid}/update', 'update')->name('post.update');
+                Route::delete('{uuid}/delete', 'destroy')->name('post.destroy');
             });
         });
 

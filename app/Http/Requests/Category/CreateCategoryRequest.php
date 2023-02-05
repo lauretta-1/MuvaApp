@@ -25,7 +25,6 @@ class CreateCategoryRequest extends FormRequest
     {
         return [
             "name" => "required",
-            "user_uuid" => "required|exists:users,uuid",
         ];
     }
 }

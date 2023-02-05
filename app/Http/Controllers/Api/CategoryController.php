@@ -6,8 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Resources\Resource\CategoryResource;
 use App\Http\Resources\Collection\CategoryResourceCollection;
-use App\Http\Requests\User\CreateCategoryRequest;
-use App\Http\Requests\User\UpdateCategoryRequest;
+use App\Http\Requests\Category\CreateCategoryRequest;
 use App\Models\Post;
 use App\Models\Category;
 use App\Models\User;
@@ -34,7 +33,7 @@ class CategoryController extends Controller
     public function store(CreateCategoryRequest $request)
     {
         $request->validated();
-        $user = User::whereUuid($request->user_uuid)->first();
+        $user = auth()->user();
         $category = Category::create([
             'user_id' => $user->id,
             'name' => $request->name
@@ -77,7 +76,7 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateCategoryRequest $request, $uuid)
+    public function update(CreateCategoryRequest $request, $uuid)
     {
         $category = Category::whereUuid($uuid)->first();
 
@@ -122,6 +121,6 @@ class CategoryController extends Controller
         }
 
         $category->delete();
-        return ['status' => 'category Deleted!'];
+        return ['status' => 'Category Deleted!'];
     }
 }

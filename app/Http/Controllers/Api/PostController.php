@@ -4,12 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\Resource\PostResource;
 use App\Http\Resources\Collection\PostResourceCollection;
-use App\Http\Requests\User\CreatePostRequest;
-use App\Http\Requests\User\GetPostRequest;
-use App\Http\Requests\User\UpdatePostRequest;
+use App\Http\Requests\Post\CreatePostRequest;
+use App\Http\Requests\Post\UpdatePostRequest;
 use App\Models\Post;
 use App\Models\Category;
 use App\Models\User;
@@ -33,9 +31,26 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreatePostRequest $request)
     {
-        //
+        $request->validated();
+        $category = Category::whereUuid($request->category_uuid)->first();
+
+        $post = Post::create([
+            'user_id' => auth()->user()->id,
+            'category_id' => $category->id,
+            'title' => $request->title,
+            'body' => $request->body
+        ]);
+
+        if($post){
+            return new PostResource($post);
+        }else{
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'Something went wrong'
+            ], 400);
+        }
     }
 
     /**
@@ -46,7 +61,16 @@ class PostController extends Controller
      */
     public function show($uuid)
     {
-        //
+        $post = Post::whereUuid($uuid)->first();
+
+        if($post){
+            return new PostResource($post);
+        }else{
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'Post does not exist!'
+            ], 404);
+        }
     }
 
     /**
@@ -56,9 +80,25 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $uuid)
+    public function update(UpdatePostRequest $request, $uuid)
     {
-        //
+        $post = Post::whereUuid($uuid)->first();
+
+        if(!$post){
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'Post does not exist!'
+            ], 404);
+        }
+        if($post->user_id !== auth()->user()->id){
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'Forbidden!'
+            ], 403);
+        }
+        $post->update($request->validated());
+
+        return new PostResource($post);
     }
 
     /**
@@ -69,6 +109,22 @@ class PostController extends Controller
      */
     public function destroy($uuid)
     {
-        //
+        $post = Post::whereUuid($uuid)->first();
+
+        if(!$post){
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'Post does not exist!'
+            ], 404);
+        }
+        if($post->user_id !== auth()->user()->id){
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'Forbidden!'
+            ], 403);
+        }
+
+        $post->delete();
+        return ['status' => 'Post Deleted!'];
     }
 }
