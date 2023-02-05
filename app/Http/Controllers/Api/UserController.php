@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\Resource\UserResource;
+use App\Http\Resources\Collection\UserResourceCollection;
 use App\Http\Requests\User\RegisterUserRequest;
 use App\Http\Requests\User\LoginUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
@@ -15,6 +15,22 @@ use JWTAuth;
 
 class UserController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(){
+        $users = User::latest();
+        return new UserResourceCollection($users);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function register(RegisterUserRequest $request)
     {
         $user = User::create(array_merge(
@@ -25,6 +41,12 @@ class UserController extends Controller
         return new UserResource($user);
     }
 
+    /**
+     * log in a resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function login(LoginUserRequest $request){
         $token_validity = 24 * 60;
         $this->guard()->factory()->setTTL($token_validity);
@@ -105,5 +127,21 @@ class UserController extends Controller
         $user = auth()->user();
         $user->delete();
         return ['status' => 'Account Deleted!'];
+    }
+
+    /**
+     * Display a listing of the user posts.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function userPosts(){
+        $user = auth()->user();
+        $posts = $user->posts;
+
+        return response()->json([
+                'status' => 'success',
+                'message' => 'Fetched Posts',
+                'data' => $posts
+            ], 200);
     }
 }

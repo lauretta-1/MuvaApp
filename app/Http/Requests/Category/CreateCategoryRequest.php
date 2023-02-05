@@ -13,7 +13,7 @@ class CreateCategoryRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,8 @@ class CreateCategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            "name" => "required",
+            "user_uuid" => "required|exists:users,uuid",
         ];
     }
 }

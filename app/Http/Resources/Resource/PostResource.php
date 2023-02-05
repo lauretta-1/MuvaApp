@@ -15,7 +15,7 @@ class PostResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'=>$this->uuid,
+            'uuid'=>$this->uuid,
                 'attributes'=>[
                     'title'=>$this->title,
                     'body'=>$this->body,
@@ -32,5 +32,4 @@ class PostResource extends JsonResource
             'Status' => 'OK'
         ];
     }
-
 }

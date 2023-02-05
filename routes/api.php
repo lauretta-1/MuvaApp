@@ -27,6 +27,7 @@ Route::group(['prefix' => 'v1'], function () {
             Route::controller(UserController::class)->group(function (){
                 Route::get('', 'index')->name('user.index');
                 Route::get('profile', 'show')->name('user.show');
+                Route::get('{uuid}/posts', 'userPosts')->name('user.posts');
                 Route::patch('update', 'update')->name('user.update');
                 Route::delete('delete', 'destroy')->name('user.destroy');
                 Route::get('logout', 'logout')->name('logout');

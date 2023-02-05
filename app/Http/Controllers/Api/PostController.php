@@ -4,6 +4,15 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\Resource\PostResource;
+use App\Http\Resources\Collection\PostResourceCollection;
+use App\Http\Requests\User\CreatePostRequest;
+use App\Http\Requests\User\GetPostRequest;
+use App\Http\Requests\User\UpdatePostRequest;
+use App\Models\Post;
+use App\Models\Category;
+use App\Models\User;
 
 class PostController extends Controller
 {
@@ -14,7 +23,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        $posts = Post::latest();
+        return new PostResourceCollection($posts);
     }
 
     /**
@@ -31,10 +41,10 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $uuid
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($uuid)
     {
         //
     }
@@ -46,7 +56,7 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $uuid)
     {
         //
     }
@@ -57,7 +67,7 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($uuid)
     {
         //
     }
