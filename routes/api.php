@@ -39,26 +39,10 @@ Route::group(['prefix' => 'v1'], function () {
         });
 
         // Category
-        Route::group(['prefix' => 'categories'], function () {
-            Route::controller(CategoryController::class)->group(function (){
-                Route::get('', 'index')->name('category.index');
-                Route::post('store', 'store')->name('category.store');
-                Route::get('{uuid}/show', 'show')->name('category.show');
-                Route::patch('{uuid}/update', 'update')->name('category.update');
-                Route::delete('{uuid}/delete', 'destroy')->name('category.destroy');
-            });
-        });
+        Route::apiResource('categories', CategoryController::class);
 
         // Post
-        Route::group(['prefix' => 'posts'], function () {
-            Route::controller(PostController::class)->group(function (){
-                Route::get('', 'index')->name('post.index');
-                Route::post('store', 'store')->name('post.store');
-                Route::get('{uuid}/show', 'show')->name('post.show');
-                Route::patch('{uuid}/update', 'update')->name('post.update');
-                Route::delete('{uuid}/delete', 'destroy')->name('post.destroy');
-            });
-        });
+        Route::apiResource('posts', PostController::class);
 
     });
 });
