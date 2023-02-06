@@ -18,16 +18,16 @@ use App\Http\Controllers\Api\PostController;
 */
 
 Route::group(['prefix' => 'v1'], function () {
-    Route::post("user/register", [UserController::class, "register"])->name('register');
-    Route::post("user/login", [UserController::class, "login"])->name('login');
+    Route::post('user/register', [UserController::class, 'register'])->name('register');
+    Route::post('user/login', [UserController::class, 'login'])->name('login');
 
     Route::group(['middleware' => 'auth:api'], function () {
         // User
-        Route::group(['prefix' => 'users'], function () {
+        Route::get('users', [UserController::class, 'index'])->name('user.index');
+        Route::group(['prefix' => 'user'], function () {
             Route::controller(UserController::class)->group(function (){
-                Route::get('', 'index')->name('user.index');
                 Route::get('profile', 'show')->name('user.show');
-                Route::get('{uuid}/posts', 'userPosts')->name('user.posts');
+                Route::get('posts', 'userPosts')->name('user.posts');
                 Route::patch('update', 'update')->name('user.update');
                 Route::delete('delete', 'destroy')->name('user.destroy');
                 Route::get('logout', 'logout')->name('logout');
@@ -38,6 +38,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::group(['prefix' => 'categories'], function () {
             Route::controller(CategoryController::class)->group(function (){
                 Route::get('', 'index')->name('category.index');
+                Route::post('store', 'store')->name('category.store');
                 Route::get('{uuid}/show', 'show')->name('category.show');
                 Route::patch('{uuid}/update', 'update')->name('category.update');
                 Route::delete('{uuid}/delete', 'destroy')->name('category.destroy');
@@ -48,6 +49,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::group(['prefix' => 'posts'], function () {
             Route::controller(PostController::class)->group(function (){
                 Route::get('', 'index')->name('post.index');
+                Route::post('store', 'store')->name('post.store');
                 Route::get('{uuid}/show', 'show')->name('post.show');
                 Route::patch('{uuid}/update', 'update')->name('post.update');
                 Route::delete('{uuid}/delete', 'destroy')->name('post.destroy');

@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Category extends Basemodel
 {
-    use HasFactory;
+    protected $has_uuid = true;
 
     public function user(){
         return $this->belongsTo(User::class);

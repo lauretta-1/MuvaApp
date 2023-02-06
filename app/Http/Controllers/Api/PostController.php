@@ -4,8 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Resources\Resource\PostResource;
-use App\Http\Resources\Collection\PostResourceCollection;
+use App\Http\Resources\Post\PostResource;
 use App\Http\Requests\Post\CreatePostRequest;
 use App\Http\Requests\Post\UpdatePostRequest;
 use App\Models\Post;
@@ -21,8 +20,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::latest();
-        return new PostResourceCollection($posts);
+        $posts = Post::latest()->paginate(9);
+        return PostResource::collection($posts);
     }
 
     /**

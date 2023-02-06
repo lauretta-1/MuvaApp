@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Resources\Resource\UserResource;
-use App\Http\Resources\Collection\UserResourceCollection;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\User\UserResource;
 use App\Http\Requests\User\RegisterUserRequest;
 use App\Http\Requests\User\LoginUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
@@ -21,8 +21,8 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
-        $users = User::latest();
-        return new UserResourceCollection($users);
+        $users = User::latest()->get();
+        return UserResource::collection($users);
     }
 
     /**

@@ -4,8 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Resources\Resource\CategoryResource;
-use App\Http\Resources\Collection\CategoryResourceCollection;
+use App\Http\Resources\Category\CategoryResource;
 use App\Http\Requests\Category\CreateCategoryRequest;
 use App\Models\Post;
 use App\Models\Category;
@@ -20,8 +19,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::latest();
-        return new CategoryResourceCollection($categories);
+        $categories = Category::latest()->get();
+        return CategoryResource::collection($categories);
     }
 
     /**
