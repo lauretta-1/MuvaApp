@@ -31,6 +31,10 @@ Route::group(['prefix' => 'v1'], function () {
                 Route::patch('update', 'update')->name('user.update');
                 Route::delete('delete', 'destroy')->name('user.destroy');
                 Route::get('logout', 'logout')->name('logout');
+
+                // Forgot and Reset Password
+                Route::post('forgot-password', 'sendPasswordResetMail')->name('forgot-password');
+                Route::post('password-reset', 'resetPasswordResponse')->name('password-reset');
             });
         });
 

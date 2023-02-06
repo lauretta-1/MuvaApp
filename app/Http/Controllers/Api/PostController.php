@@ -32,7 +32,6 @@ class PostController extends Controller
      */
     public function store(CreatePostRequest $request)
     {
-        $request->validated();
         $category = Category::whereUuid($request->category_uuid)->first();
 
         $post = Post::create([
