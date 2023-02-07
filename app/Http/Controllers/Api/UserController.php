@@ -185,7 +185,7 @@ class UserController extends Controller
     public function resetPasswordResponse(PasswordResetRequest $request)
     {
         $passwordReset = PasswordReset::where('token', $request->token)->first();
-        
+
          if(! $passwordReset){
             return response()->json([
                 "message"=>"Password reset token has been used"
