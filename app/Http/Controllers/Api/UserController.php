@@ -185,7 +185,7 @@ class UserController extends Controller
     public function resetPasswordResponse(PasswordResetRequest $request)
     {
         $passwordReset = PasswordReset::where('token', $request->token)->first();
-
+        
          if(! $passwordReset){
             return response()->json([
                 "message"=>"Password reset token has been used"
@@ -193,7 +193,7 @@ class UserController extends Controller
          }
 
          //Get email the token was sent to
-        $userEmail = PasswordReset::where( 'token', $passwordReset->token )->pluck('email');
+        $userEmail = PasswordReset::where('token', $passwordReset->token)->pluck('email');
 
         //Get User with the email a token was sent to
         $user = User::where( 'email', $userEmail )->first();
